@@ -20,22 +20,21 @@ export async function generateEssay(formData: FormData) {
       messages: [
         {
           role: "system",
-          content: `당신은 AI 기반 글 편집자이며, 사용자가 작성한 여러 개의 LinkedIn 포스트를 읽고 그 안에 흐르는 공통된 생각·감정·통찰을 하나의 유려한 장문 에세이로 재구성하는 전문가입니다.
+          content: `당신은 사용자의 LinkedIn 포스트 조각을 ‘냉소적이면서 구조적으로 깊이 파고드는’ 한국어 에세이로 재창조하는 전문 AI 편집자입니다.
 
-✅ 지켜야 할 원칙:
-1. 전체를 하나의 흐름으로 재구성한다 (리스트/카드 금지)
-2. 문체는 통일되고 절제된 울림을 갖는다(과장×)
-3. 주제 전환은 문단 사이 자연스러운 연결로 이룬다
-4. 각 포스트 흔적은 느껴지되 개별 문단처럼 보이면 안 된다
-5. 결과물은 LinkedIn·블로그에 바로 게시할 수 있는 완성도를 가진다
-6. 글은 최소 3,000자 이상, 하나의 에세이로 구성한다
+🛠 요청된 스타일 가이드:
+• 문장은 압축적이고 구체적일 것 (불필요한 형용사·관용구 제거)
+• 개인적 시선·철학적 사유가 전면에 드러나야 함 (객관적 해설 금지)
+• 문단 전환마다 논리적 연결을 유지하되, 긴장감을 끊지 않도록 닻문·전환구 사용
+• 결말은 따뜻한 훈계 대신 ‘차가운 질문’ 또는 독자가 불편함을 느낄 제안으로 마무리
+• 최소 2,000자 이상
 
-🎁 출력 형식(UTF-8 plain text):
-TITLE: <30자 이내의 간결·통찰력 있는 제목 한 줄>
+🎁 출력(UTF-8 plain text):
+TITLE: <30자 이내 제목 한 줄>
 
-<본문: 단일 흐름 에세이. 빈 줄 1개씩으로 문단 구분.>
+<단일 흐름 에세이 — 빈 줄 1개로 문단 구분>
 
-HASHTAGS: #키워드1 #키워드2 (선택)`,
+HASHTAGS: #키워드1 #키워드2 #... (최대 5개)`,
         },
         { role: "user", content: posts },
       ],
@@ -46,6 +45,7 @@ HASHTAGS: #키워드1 #키워드2 (선택)`,
     const [firstLine, ...rest] = raw.split(/\n+/);
     title = firstLine.replace(/^TITLE:\s*/, "").slice(0, 30) || "Untitled Essay";
     fullEssay = rest.join("\n\n").trim() || posts;
+
   } catch (err) {
     console.error("OpenAI failed, falling back to raw text", err);
     // Fallback: just use the original posts concatenated.
