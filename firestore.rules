@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Essays collection
+    match /essays/{essayId} {
+      // Everyone can read public essays
+      allow get, list if resource.data.public == true;
+
+      // Anonymous users can create a new essay document (generateEssay action)
+      allow create: if
+        request.auth == null &&
+        request.resource.data.authorBirthdate is string &&
+        request.resource.data.fullEssay is string &&
+        request.resource.data.fullEssay.size() <= 30000 && // 30k chars safety
+        request.resource.data.title is string;
+
+      // The owner (linked via authorId) can update / delete their own doc after login
+      allow update, delete: if
+        request.auth != null &&
+        resource.data.authorId != null &&
+        request.auth.uid == resource.data.authorId;
+    }
+
+    // Add additional collections (likes, reports) as needed
+  }
+}
