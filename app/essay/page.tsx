@@ -29,6 +29,7 @@ export default async function EssayList() {
       <h1 className="text-2xl font-serif font-bold mb-6">최근 이야깃거리</h1>
       <ul className="space-y-4">
         {snap.docs.map((doc) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const d = doc.data() as EssayPreview;
           return (
             <li key={doc.id}>
