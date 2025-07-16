@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
@@ -8,6 +7,7 @@ export const dynamic = "force-dynamic";
 type EssayPreview = {
   title?: string;
   createdAt?: { toDate: () => Date } | null;
+  public?: boolean;
 };
 
 export default async function EssayList() {
@@ -17,7 +17,7 @@ export default async function EssayList() {
     orderBy("createdAt", "desc"),
     limit(20)
   );
-  const snap = await getDocs(q);
+  const snap = await getDocs<EssayPreview>(q);
 
   if (snap.empty) {
     return (
@@ -30,7 +30,7 @@ export default async function EssayList() {
       <h1 className="text-2xl font-serif font-bold mb-6">최근 이야깃거리</h1>
       <ul className="space-y-4">
         {snap.docs.map((doc) => {
-          const d = doc.data() as EssayPreview;
+          const d = doc.data();
           return (
             <li key={doc.id}>
               <Link href={`/essay/${doc.id}`} className="text-lg font-medium hover:underline">
