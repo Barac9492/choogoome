@@ -1,4 +1,5 @@
 import { generateEssay } from "./actions";
+import SubmitButton from "@/components/SubmitButton";
 
 export default function Home() {
   return (
@@ -32,19 +33,17 @@ export default function Home() {
             외부에 공개되지 않으며, 추후 글 복구에만 사용됩니다
           </span>
           <input
-            type="date"
+            type="text"
             name="birthdate"
             required
+            placeholder="예: 1981-12-14"
+            pattern="\d{4}-\d{2}-\d{2}"
+            inputMode="numeric"
             className="p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black/40"
           />
         </label>
 
-        <button
-          type="submit"
-          className="bg-black text-white py-2 rounded-md hover:opacity-90 transition-transform hover:-translate-y-0.5"
-        >
-          ✨ 내 이야기로 정리해줘
-        </button>
+        <SubmitButton />
       </form>
 
       <p className="text-sm text-gray-600 text-center max-w-xl mt-10 leading-relaxed">
