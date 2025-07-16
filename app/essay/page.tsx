@@ -4,6 +4,11 @@ import { firestore } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
 
+type EssayPreview = {
+  title?: string;
+  createdAt?: { toDate: () => Date } | null;
+};
+
 export default async function EssayList() {
   const q = query(
     collection(firestore, "essays"),
@@ -24,7 +29,7 @@ export default async function EssayList() {
       <h1 className="text-2xl font-serif font-bold mb-6">최근 이야깃거리</h1>
       <ul className="space-y-4">
         {snap.docs.map((doc) => {
-          const d = doc.data() as any;
+          const d = doc.data() as EssayPreview;
           return (
             <li key={doc.id}>
               <Link href={`/essay/${doc.id}`} className="text-lg font-medium hover:underline">
